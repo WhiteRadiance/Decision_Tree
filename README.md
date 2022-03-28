@@ -1,2 +1,2 @@
 # Decision_Tree
-决策树（增益率划分）
+C4.5算法[Quinlan, 1993]
