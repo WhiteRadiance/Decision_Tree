@@ -13,13 +13,13 @@ using namespace std;
 
 template <typename T>
 struct s_Node {
-	T				data;
+	T			data;
 	bool			leaf;
 	s_Node*			pparent;
-	vector<s_Node*> pvchild;
+	vector<s_Node*> 	pvchild;
 
 	s_Node() { leaf = 0; pparent = NULL; }
-	s_Node(T val, bool bleaf=0, s_Node* pp=NULL):data(val),leaf(bleaf),pparent(pp) {}
+	s_Node(T val, bool bleaf=0, s_Node* pp=NULL) : data(val), leaf(bleaf), pparent(pp) {}
 };
 
 
@@ -28,21 +28,21 @@ template <typename T>
 class c_Tree {
 private:
 	s_Node<T>*		root;
-	int				sum;
+	int			sum;
 
 public:
 	c_Tree() { root = NULL; sum = 1; }
-	c_Tree(s_Node<T>* pr):root(pr), sum(1) {}
+	c_Tree(s_Node<T>* pr) : root(pr), sum(1) {}
 	int			get_sum(void) { return this->sum; }
-	s_Node<T>*	init(s_Node<T>* pnode);
-	s_Node<T>*	putChild(s_Node<T>* pnode, s_Node<T>* pparent_node);
+	s_Node<T>*		init(s_Node<T>* pnode);
+	s_Node<T>*		putChild(s_Node<T>* pnode, s_Node<T>* pparent_node);
 	void	leaf(s_Node<T>* pnode) { pnode->leaf = 1; }
 	void	traversal(s_Node<T>* pnode);
 	void	traversal() { this->traversal(this->root); }
 };
 
 template <typename T>
-s_Node<T>*	c_Tree<T>::init(s_Node<T>* pnode)
+s_Node<T>* c_Tree<T>::init(s_Node<T>* pnode)
 {
 	s_Node<T>* pNew = new s_Node<T>;
 	if (pNew != NULL) {
@@ -55,7 +55,7 @@ s_Node<T>*	c_Tree<T>::init(s_Node<T>* pnode)
 }
 
 template <typename T>
-s_Node<T>*	c_Tree<T>::putChild(s_Node<T>* pnode, s_Node<T>* pparent_node)
+s_Node<T>* c_Tree<T>::putChild(s_Node<T>* pnode, s_Node<T>* pparent_node)
 {
 	s_Node<T>* pNew = new s_Node<T>;
 	if (pNew != NULL) {
@@ -82,11 +82,11 @@ void c_Tree<T>::traversal(s_Node<T>* pnode)
 
 
 
-//if discrete:		sum[0] is sum of good, sum[1] is sum of bad
-//if continuous:	sum[0],sum[1] are sum_val when <= div_val (-), sum[2],sum[3] are sum_val when > div_val (+)
+//if discrete:   sum[0] is sum of good, sum[1] is sum of bad
+//if continuous: sum[0],sum[1] are sum_val when <= div_val (-), sum[2],sum[3] are sum_val when > div_val (+)
 class c_statistic {
 public:
-	string				attribute;
+	string			attribute;
 	vector<string>		vfeature;
 	vector<vector<int>>	vsum;
 };
@@ -94,10 +94,10 @@ public:
 
 
 /*
- * param:	pdata:		all of data read from the txt file					[row * col]
- *			ppure:		remove top row and first column from the pdata		[row-1 * col-1]
- *			psta:		compute the sum of good/bad items of each feature	[col-1 * 1]
- *			pconti_idx:	index of the continuous value columns in ppure		[row-1 * n]
+ * param:	pdata:		all of data read from the txt file			[row * col]
+ *		ppure:		remove top row and first column from the pdata		[row-1 * col-1]
+ *		psta:		compute the sum of good/bad items of each feature	[col-1 * 1]
+ *		pconti_idx:	index of the continuous value columns in ppure		[row-1 * n]
  */
 void prepare(string filepath, int row, int col, vector<vector<string>>* pdata, vector<vector<string>>* ppure, \
 	vector<c_statistic>* psta, vector<vector<double>>* pconti_divide, vector<int>* pconti_idx)
@@ -111,7 +111,7 @@ void prepare(string filepath, int row, int col, vector<vector<string>>* pdata, v
 	if (fp == NULL)
 		return;
 
-	//increase attributes for continuous column like '√‹∂»0.244','√‹∂»0.294',...
+	//increase attributes for continuous column like 'ÂØÜÂ∫¶0.244','ÂØÜÂ∫¶0.294',...
 	char cc = 0;
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < col - 1; j++) {
@@ -135,7 +135,7 @@ void prepare(string filepath, int row, int col, vector<vector<string>>* pdata, v
 	pure_t.erase(pure_t.begin());					//erase top row
 	for (int i = 0; i < row - 1; i++)
 		pure_t[i].erase(pure_t[i].begin());			//erase first column
-	ppure->swap(pure_t);							//swap ppure and pure_t
+	ppure->swap(pure_t);						//swap ppure and pure_t
 
 	//dispaly pdata, ppure and psta
 	cout << "\n > data <" << endl;
@@ -159,9 +159,9 @@ void prepare(string filepath, int row, int col, vector<vector<string>>* pdata, v
 
 /*
  * param:	ppure:		pointer of pure data
- *			psta:		pointer of statistics
- *			pconti_div:	div_val of the continuous value columns
- *			pconti_idx:	index of the continuous value columns
+ *		psta:		pointer of statistics
+ *		pconti_div:	div_val of the continuous value columns
+ *		pconti_idx:	index of the continuous value columns
  */
 void Statistics(vector<vector<string>>* ppure, vector<c_statistic>* psta, vector<vector<double>>* pconti_divide, \
 	vector<int>* pconti_idx)
@@ -170,7 +170,7 @@ void Statistics(vector<vector<string>>* ppure, vector<c_statistic>* psta, vector
 	//discretize the continuous values
 	int	nconti = 0;
 	vector<vector<double>> conti_values(pconti_idx->size());		//save the continuous values (string -> double -> sort)
-	pconti_divide->resize(pconti_idx->size());						//save the divide value to split the conti_values
+	pconti_divide->resize(pconti_idx->size());				//save the divide value to split the conti_values
 	for (int j = 0; j < (int)psta->size(); j++) {
 		if (j == pconti_idx->at(nconti)) {
 			conti_values[nconti].resize(ppure->size());
@@ -190,29 +190,29 @@ void Statistics(vector<vector<string>>* ppure, vector<c_statistic>* psta, vector
 	//compute statistics
 	nconti = 0;
 	for (int j = 0; j < (int)psta->size(); j++) {
-		if (j == pconti_idx->at(nconti)) {									//when meet continuous columns
+		if (j == pconti_idx->at(nconti)) {							//when meet continuous columns
 			char c_str[10] = { 0 };
 			psta->at(j).vfeature.resize(pconti_divide->at(nconti).size(), "");
 			psta->at(j).vsum.resize(pconti_divide->at(nconti).size());
 			for (int n = 0; n < psta->at(j).vsum.size(); n++)
-				psta->at(j).vsum[n].resize(4, 0);							//vsum[0]/[1] = (val<=div), vsum[2]/[4] = (val>div)
+				psta->at(j).vsum[n].resize(4, 0);					//vsum[0]/[1] = (val<=div), vsum[2]/[4] = (val>div)
 			for (int k = 0; k < psta->at(j).vsum.size(); k++) {				//create the <c_string> features of divide values
 				int ccc = sprintf(c_str, "%6.4f", pconti_divide->at(nconti)[k]);
 				psta->at(j).vfeature[k] = c_str;
 			}
 
-			for (int i = 0; i < ppure->size(); i++) {						//loop of every row of continuous value
+			for (int i = 0; i < ppure->size(); i++) {					//loop of every row of continuous value
 				int t = 0;
-				for (t = 0; t < (int)psta->at(j).vfeature.size(); t++) {	//loop of every divide value
+				for (t = 0; t < (int)psta->at(j).vfeature.size(); t++) {		//loop of every divide value
 					if (stod(ppure->at(i)[pconti_idx->at(nconti)]) <= pconti_divide->at(nconti)[t]) {
-						if (ppure->at(i)[psta->size() - 1] == " «")				psta->at(j).vsum[t][0]++;
-						else if (ppure->at(i)[psta->size() - 1] == "∑Ò")		psta->at(j).vsum[t][1]++;
-						else { cout << "\n***** ◊Ó∫Û“ª¡–√ª”–∑¢œ÷”––ßµƒ±Í«© *****\n"; return; }
+						if (ppure->at(i)[psta->size() - 1] == "ÊòØ")		psta->at(j).vsum[t][0]++;
+						else if (ppure->at(i)[psta->size() - 1] == "Âê¶")		psta->at(j).vsum[t][1]++;
+						else { cout << "\n***** ÊúÄÂêé‰∏ÄÂàóÊ≤°ÊúâÂèëÁé∞ÊúâÊïàÁöÑÊ†áÁ≠æ *****\n"; return; }
 					}
 					else {
-						if (ppure->at(i)[psta->size() - 1] == " «")				psta->at(j).vsum[t][2]++;
-						else if (ppure->at(i)[psta->size() - 1] == "∑Ò")		psta->at(j).vsum[t][3]++;
-						else { cout << "\n***** ◊Ó∫Û“ª¡–√ª”–∑¢œ÷”––ßµƒ±Í«© *****\n"; return; }
+						if (ppure->at(i)[psta->size() - 1] == "ÊòØ")		psta->at(j).vsum[t][2]++;
+						else if (ppure->at(i)[psta->size() - 1] == "Âê¶")		psta->at(j).vsum[t][3]++;
+						else { cout << "\n***** ÊúÄÂêé‰∏ÄÂàóÊ≤°ÊúâÂèëÁé∞ÊúâÊïàÁöÑÊ†áÁ≠æ *****\n"; return; }
 					}
 				}
 			}
@@ -225,9 +225,9 @@ void Statistics(vector<vector<string>>* ppure, vector<c_statistic>* psta, vector
 				int t = 0;
 				for (t = 0; t < (int)psta->at(j).vfeature.size(); t++) {
 					if (ppure->at(i)[j] == psta->at(j).vfeature[t]) {
-						if (ppure->at(i)[psta->size() - 1] == " «")				psta->at(j).vsum[t][0]++;
-						else if (ppure->at(i)[psta->size() - 1] == "∑Ò")		psta->at(j).vsum[t][1]++;
-						else { cout << "\n***** ◊Ó∫Û“ª¡–√ª”–∑¢œ÷”––ßµƒ±Í«© *****\n"; return; }
+						if (ppure->at(i)[psta->size() - 1] == "ÊòØ")		psta->at(j).vsum[t][0]++;
+						else if (ppure->at(i)[psta->size() - 1] == "Âê¶")		psta->at(j).vsum[t][1]++;
+						else { cout << "\n***** ÊúÄÂêé‰∏ÄÂàóÊ≤°ÊúâÂèëÁé∞ÊúâÊïàÁöÑÊ†áÁ≠æ *****\n"; return; }
 						break;
 					}
 					else;
@@ -235,9 +235,9 @@ void Statistics(vector<vector<string>>* ppure, vector<c_statistic>* psta, vector
 				if (t == psta->at(j).vfeature.size()) {
 					string newfeature = ppure->at(i)[j];
 					vector<int> newsum(2, 0);
-					if (ppure->at(i)[psta->size() - 1] == " «")					newsum[0] = 1;
-					else if (ppure->at(i)[psta->size() - 1] == "∑Ò")			newsum[1] = 1;
-					else { cout << "\n***** ◊Ó∫Û“ª¡–√ª”–∑¢œ÷”––ßµƒ±Í«© *****\n"; return; }
+					if (ppure->at(i)[psta->size() - 1] == "ÊòØ")			newsum[0] = 1;
+					else if (ppure->at(i)[psta->size() - 1] == "Âê¶")			newsum[1] = 1;
+					else { cout << "\n***** ÊúÄÂêé‰∏ÄÂàóÊ≤°ÊúâÂèëÁé∞ÊúâÊïàÁöÑÊ†áÁ≠æ *****\n"; return; }
 					psta->at(j).vfeature.push_back(newfeature);
 					psta->at(j).vsum.push_back(newsum);
 				}
@@ -302,27 +302,27 @@ void Gain_InfoEntropy(vector<size_t>* pidx, vector<vector<string>>* ppure, vecto
 	//compute attribute entropy
 	vector<vector<double>>	att_entropy_history(psta->size() - 1);
 	vector<double>			att_entropy(psta->size() - 1, 0.0);
-	vector<vector<double>>	conti_att_entropy(pconti_idx->size());			//exclusive vec_entropy for continuous value
+	vector<vector<double>>	conti_att_entropy(pconti_idx->size());				//exclusive vec_entropy for continuous value
 	vector<vector<double>>	weight(psta->size() - 1);
 	vector<double>			gain(psta->size() - 1, 0.0);
 	vector<vector<double>>	conti_gain(pconti_idx->size());					//exclusive vec_gain for continuous value
-	vector<int>				conti_max_idx(pconti_idx->size(), 0);			//save the max_val's [idx] in each continuoue columns
+	vector<int>				conti_max_idx(pconti_idx->size(), 0);		//save the max_val's [idx] in each continuoue columns
 	
 	nconti = 0;
-	for (int i = 0; i < (int)psta->size() - 1; i++)							//loop of every attribute EXCEPT column[good/bad]
+	for (int i = 0; i < (int)psta->size() - 1; i++)						//loop of every attribute EXCEPT column[good/bad]
 	{
 		if (i == pconti_idx->at(nconti)) {
 			conti_att_entropy[nconti].resize(psta->at(i).vfeature.size(), 0.0);
 			conti_gain[nconti].resize(psta->at(i).vfeature.size(), 0.0);
 			for (int j = 0; j < (int)psta->at(i).vfeature.size(); j++)		//loop of every feature
 			{
-				int		posi1 = psta->at(i).vsum[j][0];						// <=,good
-				int		nega1 = psta->at(i).vsum[j][1];						// <=,bad
-				int		posi2 = psta->at(i).vsum[j][2];						// >,good
-				int		nega2 = psta->at(i).vsum[j][3];						// >bad
-				int		lesse = posi1 + nega1;								// less or equal
+				int		posi1 = psta->at(i).vsum[j][0];			// <=,good
+				int		nega1 = psta->at(i).vsum[j][1];			// <=,bad
+				int		posi2 = psta->at(i).vsum[j][2];			// >,good
+				int		nega2 = psta->at(i).vsum[j][3];			// >bad
+				int		lesse = posi1 + nega1;				// less or equal
 				int		biger = posi2 + nega2;
-				double	p11 = (double)posi1 / lesse;						//guarantee that p(n)(n) will never eauql to 0
+				double	p11 = (double)posi1 / lesse;				//guarantee that p(n)(n) will never eauql to 0
 				double	p12 = (double)nega1 / lesse;
 				double	p21 = (double)posi2 / biger;
 				double	p22 = (double)nega2 / biger;
@@ -332,12 +332,12 @@ void Gain_InfoEntropy(vector<size_t>* pidx, vector<vector<string>>* ppure, vecto
 				if ((p11 == 0) && (p12 != 0))			lesse_entropy = -(p12 * log2(p12));
 				else if ((p11 != 0) && (p12 == 0))		lesse_entropy = -(p11 * log2(p11));
 				else if ((p11 == 0) && (p12 == 0))		lesse_entropy = 0.0;
-				else									lesse_entropy = -(p11 * log2(p11) + p12 * log2(p12));
+				else						lesse_entropy = -(p11 * log2(p11) + p12 * log2(p12));
 
 				if ((p21 == 0) && (p22 != 0))			biger_entropy = -(p22 * log2(p22));
 				else if ((p21 != 0) && (p22 == 0))		biger_entropy = -(p21 * log2(p21));
 				else if ((p21 == 0) && (p22 == 0))		biger_entropy = 0.0;
-				else									biger_entropy = -(p21 * log2(p21) + p22 * log2(p22));
+				else						biger_entropy = -(p21 * log2(p21) + p22 * log2(p22));
 
 				double	more_weight_t = (double)biger / ppure->size();		//lesse_item's weight = (1 - more_weight)
 
@@ -365,9 +365,9 @@ void Gain_InfoEntropy(vector<size_t>* pidx, vector<vector<string>>* ppure, vecto
 				p1 = (double)posi / ((double)posi + nega);
 				p2 = (double)nega / ((double)posi + nega);
 				if ((posi == 0) && (nega != 0))			att_entropy_history[i][j] = -(p2 * log2(p2));
-				else if ((posi != 0) && (nega == 0))	att_entropy_history[i][j] = -(p1 * log2(p1));
-				else if ((posi == 0) && (nega == 0))	att_entropy_history[i][j] = 0.0;
-				else									att_entropy_history[i][j] = -(p1 * log2(p1) + p2 * log2(p2));
+				else if ((posi != 0) && (nega == 0)) 		att_entropy_history[i][j] = -(p1 * log2(p1));
+				else if ((posi == 0) && (nega == 0)) 		att_entropy_history[i][j] = 0.0;
+				else						att_entropy_history[i][j] = -(p1 * log2(p1) + p2 * log2(p2));
 				weight[i][j] = (double)((double)posi + nega) / ppure->size();
 				att_entropy[i] += weight[i][j] * att_entropy_history[i][j];
 			}
@@ -417,10 +417,10 @@ void Gain_InfoEntropy(vector<size_t>* pidx, vector<vector<string>>* ppure, vecto
 	bool can_del = 1;
 	vector<double>::iterator it = max_element(gain.begin(), gain.end());
 	int max_idx = int(it - gain.begin());
-	cout << "◊Ó¥ÛµƒGain: (" << psta->at(max_idx).attribute;
+	cout << "ÊúÄÂ§ßÁöÑGain: (" << psta->at(max_idx).attribute;
 	for (int i = 0; i < pconti_idx->size(); i++) {
 		if (pconti_idx->at(i) == max_idx) {
-			can_del = 0;													//indicates that conti_col can't be deleted
+			can_del = 0;								//indicates that conti_col can't be deleted
 			cout << "->" << psta->at(max_idx).vfeature[conti_max_idx[i]];
 			break;
 		}
@@ -446,7 +446,7 @@ void Correct_conti_idx(vector<int>* pconti_idx, int del_idx)
 	int flag_correct = 1;
 	for (int i = 0; i < pconti_idx->size(); i++) {
 		if (pconti_idx->at(i) == del_idx) {
-			flag_correct = 0;													//indicates that conti_col can't be corrected
+			flag_correct = 0;							//indicates that conti_col can't be corrected
 			break;
 		}
 	}
@@ -456,7 +456,7 @@ void Correct_conti_idx(vector<int>* pconti_idx, int del_idx)
 		int p = 0;
 		for (p = 0; p < pconti_idx->size(); p++) {
 			if (pconti_idx->at(p) == del_idx)
-				cout << "\n***** ∆ÛÕº…æ≥˝¡¨–¯÷µµƒΩ·µ„ ˝æ› *****\n";
+				cout << "\n***** ‰ºÅÂõæÂà†Èô§ËøûÁª≠ÂÄºÁöÑÁªìÁÇπÊï∞ÊçÆ *****\n";
 			else if (pconti_idx->at(p) > del_idx) {
 				pconti_idx->at(p) -= 1;
 			}
@@ -478,7 +478,8 @@ int Check_Recursion_Case2(vector<vector<string>>* ppure, vector<c_statistic>* ps
 {
 	for (int i = 0; i < psta->size() - 1; i++) {
 		for (int j = 0; j < psta->at(i).vfeature.size(); j++) {
-			if ((size_t)psta->at(i).vsum[j][0] + psta->at(i).vsum[j][1] != ppure->size() || (size_t)psta->at(i).vsum[j][0] + psta->at(i).vsum[j][1] != 0)
+			if ((size_t)psta->at(i).vsum[j][0] + psta->at(i).vsum[j][1] != ppure->size() || \
+			    (size_t)psta->at(i).vsum[j][0] + psta->at(i).vsum[j][1] != 0)
 				return 0;
 			else;
 		}
@@ -486,10 +487,10 @@ int Check_Recursion_Case2(vector<vector<string>>* ppure, vector<c_statistic>* ps
 
 	if (psta->at(psta->size() - 1).vsum[0][0] > psta->at(psta->size() - 1).vsum[1][1])		//if good > bad
 		return 1;
-	else if (psta->at(psta->size() - 1).vsum[1][1] < psta->at(psta->size() - 1).vsum[0][0])	//if good < bad
+	else if (psta->at(psta->size() - 1).vsum[1][1] < psta->at(psta->size() - 1).vsum[0][0]) 	//if good < bad
 		return 2;
 	else {
-		cout << "\nCase2 À˘”–—˘±æ ˝æ› ‘⁄À˘”– Ù–‘…œ µƒ»°÷µœ‡Õ¨£¨”¶∏√—°‘Ò◊Ó∂‡µƒ¿‡±£¨µ´ «∫√ªµ≤Œ∞Î" << endl;
+		cout << "\nCase2 ÊâÄÊúâÊ†∑Êú¨Êï∞ÊçÆ Âú®ÊâÄÊúâÂ±ûÊÄß‰∏ä ÁöÑÂèñÂÄºÁõ∏ÂêåÔºåÂ∫îËØ•ÈÄâÊã©ÊúÄÂ§öÁöÑÁ±ªÂà´Ôºå‰ΩÜÊòØÂ•ΩÂùèÂèÇÂçä" << endl;
 		return 3;
 	}
 }
@@ -512,8 +513,8 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 
 	//End of recursion --- (case 1)
 	if (psta_part->at(psta_part->size() - 1).vsum[0][0] == ppure_part->size()) {			//if all are good
-		cout << "[∂º «∫√πœ.]" << endl;
-		node.data = "if" + branch + ",∫√πœ"; node.leaf = 1;
+		cout << "[ÈÉΩÊòØÂ•ΩÁìú.]" << endl;
+		node.data = "if" + branch + ",Â•ΩÁìú"; node.leaf = 1;
 		if (pparent_node == NULL)
 			ptree->init(&node);
 		else
@@ -521,8 +522,8 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 		return;
 	}
 	else if (psta_part->at(psta_part->size() - 1).vsum[1][1] == ppure_part->size()) {		//if all are bad
-		cout << "[∂º «ªµπœ.]" << endl;
-		node.data = "if" + branch + ",ªµπœ"; node.leaf = 1;
+		cout << "[ÈÉΩÊòØÂùèÁìú.]" << endl;
+		node.data = "if" + branch + ",ÂùèÁìú"; node.leaf = 1;
 		if (pparent_node == NULL)
 			ptree->init(&node);
 		else
@@ -532,10 +533,10 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 	else;
 
 	//End of recursion --- (case 2)
-	int ck = Check_Recursion_Case2(ppure_part, psta_part);									//if all data have same features
+	int ck = Check_Recursion_Case2(ppure_part, psta_part);						//if all data have same features
 	if (psta_part->size() == 1 || ck > 0 ) {
 		if (ck == 1) {
-			node.data = "if" + branch + ",∫√πœ"; node.leaf = 1;
+			node.data = "if" + branch + ",Â•ΩÁìú"; node.leaf = 1;
 			if (pparent_node == NULL)
 				ptree->init(&node);
 			else
@@ -543,7 +544,7 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 			return;
 		}
 		else if (ck == 3) {
-			node.data = "if" + branch + ",÷–πœ"; node.leaf = 1;
+			node.data = "if" + branch + ",‰∏≠Áìú"; node.leaf = 1;
 			if (pparent_node == NULL)
 				ptree->init(&node);
 			else
@@ -551,7 +552,7 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 			return;
 		}
 		else if (ck == 2) {
-			node.data = "if" + branch + ",ªµπœ"; node.leaf = 1;
+			node.data = "if" + branch + ",ÂùèÁìú"; node.leaf = 1;
 			if (pparent_node == NULL)
 				ptree->init(&node);
 			else
@@ -571,7 +572,7 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 	size_t i;
 	for (i = 0; i < pconti_idx->size(); i++) {
 		if (idx[0] == pconti_idx->at(i)) {
-			node.data = node.data + "(" + psta_part->at(idx[0]).vfeature[idx[i + 1]] + ")";	//»Áπ˚ «¡¨–¯÷µªπ“™◊∑º”div÷µ
+			node.data = node.data + "(" + psta_part->at(idx[0]).vfeature[idx[i + 1]] + ")"; //Â¶ÇÊûúÊòØËøûÁª≠ÂÄºËøòË¶ÅËøΩÂä†divÂÄº
 			break;
 		}
 	}node.data += "?";
@@ -580,26 +581,26 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 	if (pparent_node == NULL)		pnode_DT = ptree->init(&node);
 	else							pnode_DT = ptree->putChild(&node, pparent_node);
 
-	//====================================================== ¿Î…¢ ========================================================================
-	if (i == pconti_idx->size()) {															//»Áπ˚◊Ó”≈ªØ∑÷ Ù–‘ « ¿Î…¢÷µ
+	//====================================================== Á¶ªÊï£ ========================================================================
+	if (i == pconti_idx->size()) {									//Â¶ÇÊûúÊúÄ‰ºòÂåñÂàÜÂ±ûÊÄßÊòØ Á¶ªÊï£ÂÄº
 		for (int r = 0; r < psta_part->at(idx[0]).vfeature.size(); r++)
 		{
 			//End of recursion --- (case 3)
 			if (psta_part->at(idx[0]).vsum[r][0] + psta_part->at(idx[0]).vsum[r][1] == 0) {	//if this feature has no member
 				if (psta_part->at(psta_part->size() - 1).vsum[0][0] > psta_part->at(psta_part->size() - 1).vsum[1][1]) {
-					s_Node<string> child("∫√πœ"); child.leaf = 1;							//create a child_node
+					s_Node<string> child("Â•ΩÁìú"); child.leaf = 1; 			//create a child_node
 					ptree->putChild(&child, pnode_DT);
 					continue;
 				}
 				else if (psta_part->at(psta_part->size() - 1).vsum[0][0] < psta_part->at(psta_part->size() - 1).vsum[1][1]) {
-					s_Node<string> child("ªµπœ"); child.leaf = 1;							//create a child_node
+					s_Node<string> child("ÂùèÁìú"); child.leaf = 1; 			//create a child_node
 					ptree->putChild(&child, pnode_DT);
 					continue;
 				}
 				else
-					cout << "\nCase3-1 À˘”–—˘±æ ˝æ› ‘⁄À˘”– Ù–‘…œ µƒ»°÷µœ‡Õ¨£¨”¶∏√—°‘Ò◊Ó∂‡µƒ¿‡±£¨µ´ «∫√ªµ≤Œ∞Î" << endl;
+					cout << "\nCase3-1 ÊâÄÊúâÊ†∑Êú¨Êï∞ÊçÆ Âú®ÊâÄÊúâÂ±ûÊÄß‰∏ä ÁöÑÂèñÂÄºÁõ∏ÂêåÔºåÂ∫îËØ•ÈÄâÊã©ÊúÄÂ§öÁöÑÁ±ªÂà´Ôºå‰ΩÜÊòØÂ•ΩÂùèÂèÇÂçä" << endl;
 			}
-			else {	//œ¬√Êµƒ¥˙¬Î≤≈ «ID3æˆ≤ﬂ ˜¥Û∂‡ ˝ ±∫Úª·÷¥––µƒ≤ø∑÷ (…œ√Ê∂º «“ª–©ÕÀ≥ˆµ›πÈµƒ«Èøˆ)
+			else {	//‰∏ãÈù¢ÁöÑ‰ª£Á†ÅÊâçÊòØID3ÂÜ≥Á≠ñÊ†ëÂ§ßÂ§öÊï∞Êó∂ÂÄô‰ºöÊâßË°åÁöÑÈÉ®ÂàÜ (‰∏äÈù¢ÈÉΩÊòØ‰∏Ä‰∫õÈÄÄÂá∫ÈÄíÂΩíÁöÑÊÉÖÂÜµ)
 				//split pure to pure_t
 				vector<vector<string>> pure_part_t;
 				size_t row = 0;
@@ -613,8 +614,8 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 				}
 
 				//clear sta_part as sta_part_t
-				vector<c_statistic> sta_part_t(*psta_part);									//copy a backup
-				for (int m = 0; m < sta_part_t.size(); m++) {								//«Âø’Õ≥º∆ ˝æ›µƒ±Ìµ•∫Õ ˝æ› (≤ª…æ±Í«©)
+				vector<c_statistic> sta_part_t(*psta_part);				//copy a backup
+				for (int m = 0; m < sta_part_t.size(); m++) {				//Ê∏ÖÁ©∫ÁªüËÆ°Êï∞ÊçÆÁöÑË°®ÂçïÂíåÊï∞ÊçÆ (‰∏çÂà†Ê†áÁ≠æ)
 					if (m == sta_part_t.size() - 1) {
 						sta_part_t[m].vsum[0][0] = 0;
 						sta_part_t[m].vsum[1][1] = 0;
@@ -624,35 +625,35 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 						sta_part_t[m].vsum.resize(0);
 					}
 				}
-				sta_part_t.erase(sta_part_t.begin() + idx[0]);								//delete the max_gain column
+				sta_part_t.erase(sta_part_t.begin() + idx[0]);				//delete the max_gain column
 
 				vector<vector<double>>	conti_divide_t;
 				vector<int>				conti_idx_t(*pconti_idx);
 				string					branch_t = psta_part->at(idx[0]).vfeature[r];
-				Correct_conti_idx(&conti_idx_t, (int)idx[0]);								//æ¿’˝conti_idx
+				Correct_conti_idx(&conti_idx_t, (int)idx[0]);				//Á∫†Ê≠£conti_idx
 				TreeGenerate(ptree, pnode_DT, &pure_part_t, &sta_part_t, &conti_divide_t, &conti_idx_t, branch_t);
 			}
 		}
-	}//===================================================== ¡¨–¯ ========================================================================
-	else {																					//»Áπ˚◊Ó”≈ªØ∑÷ Ù–‘ « ¡¨–¯÷µ
-		for (int r = 0; r < 2; r++) {														// <= and >
+	}//===================================================== ËøûÁª≠ ========================================================================
+	else {																					//Â¶ÇÊûúÊúÄ‰ºòÂåñÂàÜÂ±ûÊÄßÊòØ ËøûÁª≠ÂÄº
+		for (int r = 0; r < 2; r++) {								// <= and >
 			//End of recursion --- (case 3)
 			if (psta_part->at(idx[0]).vsum[idx[i + 1]][(size_t)r * 2] + \
-				psta_part->at(idx[0]).vsum[idx[i + 1]][(size_t)r * 2 + 1] == 0) {			//if this feature has no member
+				psta_part->at(idx[0]).vsum[idx[i + 1]][(size_t)r * 2 + 1] == 0) {	//if this feature has no member
 				if (psta_part->at(psta_part->size() - 1).vsum[0][0] > psta_part->at(psta_part->size() - 1).vsum[1][1]) {
-					s_Node<string> child("∫√πœ"); child.leaf = 1;							//create a child_node
+					s_Node<string> child("Â•ΩÁìú"); child.leaf = 1;			//create a child_node
 					ptree->putChild(&child, pnode_DT);
 					continue;
 				}
 				else if (psta_part->at(psta_part->size() - 1).vsum[0][0] < psta_part->at(psta_part->size() - 1).vsum[1][1]) {
-					s_Node<string> child("ªµπœ"); child.leaf = 1;							//create a child_node
+					s_Node<string> child("ÂùèÁìú"); child.leaf = 1;			//create a child_node
 					ptree->putChild(&child, pnode_DT);
 					continue;
 				}
 				else
-					cout << "\nCase3-2 À˘”–—˘±æ ˝æ› ‘⁄À˘”– Ù–‘…œ µƒ»°÷µœ‡Õ¨£¨”¶∏√—°‘Ò◊Ó∂‡µƒ¿‡±£¨µ´ «∫√ªµ≤Œ∞Î" << endl;
+					cout << "\nCase3-2 ÊâÄÊúâÊ†∑Êú¨Êï∞ÊçÆ Âú®ÊâÄÊúâÂ±ûÊÄß‰∏ä ÁöÑÂèñÂÄºÁõ∏ÂêåÔºåÂ∫îËØ•ÈÄâÊã©ÊúÄÂ§öÁöÑÁ±ªÂà´Ôºå‰ΩÜÊòØÂ•ΩÂùèÂèÇÂçä" << endl;
 			}
-			else {	//œ¬√Êµƒ¥˙¬Î≤≈ «ID3æˆ≤ﬂ ˜¥Û∂‡ ˝ ±∫Úª·÷¥––µƒ≤ø∑÷ (…œ√Ê∂º «“ª–©ÕÀ≥ˆµ›πÈµƒ«Èøˆ)
+			else {	//‰∏ãÈù¢ÁöÑ‰ª£Á†ÅÊâçÊòØID3ÂÜ≥Á≠ñÊ†ëÂ§ßÂ§öÊï∞Êó∂ÂÄô‰ºöÊâßË°åÁöÑÈÉ®ÂàÜ (‰∏äÈù¢ÈÉΩÊòØ‰∏Ä‰∫õÈÄÄÂá∫ÈÄíÂΩíÁöÑÊÉÖÂÜµ)
 				//split pure to pure_t
 				vector<vector<string>> pure_part_t;
 				pure_part_t.resize((size_t)psta_part->at(idx[0]).vsum[idx[i + 1]][(size_t)r * 2] + \
@@ -678,8 +679,8 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 				}
 
 				//clear sta_part as sta_part_t
-				vector<c_statistic> sta_part_t(*psta_part);									//copy a backup
-				for (int m = 0; m < sta_part_t.size(); m++) {								//«Âø’Õ≥º∆ ˝æ›µƒ±Ìµ•∫Õ ˝æ› (≤ª…æ±Í«©)
+				vector<c_statistic> sta_part_t(*psta_part);					//copy a backup
+				for (int m = 0; m < sta_part_t.size(); m++) {					//Ê∏ÖÁ©∫ÁªüËÆ°Êï∞ÊçÆÁöÑË°®ÂçïÂíåÊï∞ÊçÆ (‰∏çÂà†Ê†áÁ≠æ)
 					if (m == sta_part_t.size() - 1) {
 						sta_part_t[m].vsum[0][0] = 0;
 						sta_part_t[m].vsum[1][1] = 0;
@@ -695,7 +696,7 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 				string					branch_t;
 				if (r == 0)				branch_t = "<";
 				else					branch_t = ">";
-				Correct_conti_idx(&conti_idx_t, (int)idx[0]);								//æ¿’˝conti_idx
+				Correct_conti_idx(&conti_idx_t, (int)idx[0]);					//Á∫†Ê≠£conti_idx
 				TreeGenerate(ptree, pnode_DT, &pure_part_t, &sta_part_t, &conti_divide_t, &conti_idx_t, branch_t);
 			}
 		}
@@ -706,12 +707,12 @@ void TreeGenerate(c_Tree<string>* ptree, s_Node<string>* pparent_node, vector<ve
 
 int main(void)
 {
-	string path = "D:\\VisualStudio\\2019\\Workplace\\CppTest\\Decision_Tree\\watermelon_DT.txt";
-	vector<vector<string>>	data, pure;
+	string path = ".\\watermelon_DT.txt";
+	vector<vector<string>> `	data, pure;
 	vector<c_statistic>		sta;
-	vector<int>				conti_idx = { 6, 7 };	//indicate the index of continuous columns in pure
+	vector<int>			conti_idx = { 6, 7 };		//indicate the index of continuous columns in pure
 	//vector<vector<double>>	conti_values;			//save the continuous values (string -> double -> sort)
-	vector<vector<double>>	conti_divide;			//save the divide value to split the conti_values (n-1)
+	vector<vector<double>> 		conti_divide;			//save the divide value to split the conti_values (n-1)
 
 	c_Tree<string> tree;
 
